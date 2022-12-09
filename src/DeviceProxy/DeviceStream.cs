@@ -38,7 +38,7 @@ namespace IoTHubDeviceStreamSample.DeviceProxy
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "An error occured during streaming session.");
+                    _logger.LogError(ex, "An error occurred during streaming session.");
                 }
             }
         }
