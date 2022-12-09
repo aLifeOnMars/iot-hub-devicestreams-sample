@@ -1,11 +1,11 @@
+using IoTHubDeviceStreamSample.Shared;
+using Microsoft.Azure.Devices.Client;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
-using IoTHubDeviceStreamSample.Shared;
-using Microsoft.Azure.Devices.Client;
-using Microsoft.Extensions.Logging;
 
 namespace IoTHubDeviceStreamSample.DeviceProxy
 {
@@ -56,7 +56,7 @@ namespace IoTHubDeviceStreamSample.DeviceProxy
             {
                 await _deviceClient.AcceptDeviceStreamRequestAsync(streamRequest, cancellationTokenSource.Token).ConfigureAwait(false);
 
-                using (var webSocket = await _deviceStreamClientFactory.CreateAsync(streamRequest.Url, streamRequest.AuthorizationToken, cancellationTokenSource.Token).ConfigureAwait(false))
+                using (var webSocket = await _deviceStreamClientFactory.CreateAsync(streamRequest.Uri, streamRequest.AuthorizationToken, cancellationTokenSource.Token).ConfigureAwait(false))
                 {
                     using (var tcpClient = new TcpClient())
                     {
@@ -103,9 +103,9 @@ namespace IoTHubDeviceStreamSample.DeviceProxy
                 int receiveCount = await localStream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
 
                 await remoteStream.SendAsync(
-                    new ArraySegment<byte>(buffer, 0, receiveCount), 
+                    new ArraySegment<byte>(buffer, 0, receiveCount),
                     WebSocketMessageType.Binary,
-                    endOfMessage: true, 
+                    endOfMessage: true,
                     cancellationToken).ConfigureAwait(false);
             }
         }
